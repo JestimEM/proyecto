@@ -30,6 +30,10 @@ public:
     void insertionSort();
     void printList() const;
 
+    // Métodos de acceso para pruebas
+    Node<T>* getHead() const { return head; }
+    Node<T>* getTail() const { return tail; }
+
 private:
     Node<T>* partition(Node<T>* low, Node<T>* high);
     void quickSortRec(Node<T>* low, Node<T>* high);

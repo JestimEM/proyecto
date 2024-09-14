@@ -10,11 +10,10 @@ include_directories(${GTEST_INCLUDE_DIRS})
 # Agregar el ejecutable
 add_executable(untitled
         main.cpp
-        MPointerGC.h
         MPointer.h
         DoublyLinkedList.h
-        MPointer.tpp
-        DoublyLinkedList.tpp)
+        DoublyLinkedList.tpp
+)
 
 # Enlazar con GoogleTest y pthread
 target_link_libraries(untitled ${GTEST_LIBRARIES} pthread)

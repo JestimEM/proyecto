@@ -4,10 +4,12 @@
 template <typename T>
 DoublyLinkedList<T>::DoublyLinkedList() : head(nullptr), tail(nullptr) {}
 
-// Metodo para añadir un nodo al final de la lista
+// Método para añadir un nodo al final de la lista
 template <typename T>
 void DoublyLinkedList<T>::append(const T& value) {
+    // Create a new node with an MPointer holding the value
     Node<T>* newNode = new Node<T>(value);
+
     if (!head) {
         head = tail = newNode;
     } else {
@@ -17,23 +19,20 @@ void DoublyLinkedList<T>::append(const T& value) {
     }
 }
 
-// Metodo para imprimir la lista
+// Método para imprimir la lista
 template <typename T>
 void DoublyLinkedList<T>::printList() const {
     Node<T>* temp = head;
     if (temp) {
-        std::cout << temp->data.getValue();
+        std::cout << *temp->data; // Use * to dereference MPointer
         temp = temp->next;
     }
     while (temp) {
-        std::cout << " " << temp->data.getValue();
+        std::cout << " " << *temp->data; // Use * to dereference MPointer
         temp = temp->next;
     }
     std::cout << std::endl;
 }
-
-
-
 
 // Algoritmo Bubble Sort
 template <typename T>
@@ -45,7 +44,9 @@ void DoublyLinkedList<T>::bubbleSort() {
         swapped = false;
         Node<T>* current = head;
         while (current != nullptr && current->next != nullptr) {
-            if (current->data.getValue() > current->next->data.getValue()) {
+            // Compare values using * to dereference MPointers
+            if (*current->data > *current->next->data) {
+                // Swap MPointers directly
                 std::swap(current->data, current->next->data);
                 swapped = true;
             }
@@ -64,7 +65,9 @@ void DoublyLinkedList<T>::insertionSort() {
 
     while (current != nullptr) {
         Node<T>* next = current->next;
-        if (sorted == nullptr || sorted->data.getValue() >= current->data.getValue()) {
+
+        // Compare values using * to dereference MPointers
+        if (sorted == nullptr || *sorted->data >= *current->data) {
             current->next = sorted;
             current->prev = nullptr;
             if (sorted != nullptr) {
@@ -73,7 +76,8 @@ void DoublyLinkedList<T>::insertionSort() {
             sorted = current;
         } else {
             Node<T>* temp = sorted;
-            while (temp->next != nullptr && temp->next->data.getValue() < current->data.getValue()) {
+            // Compare values using * to dereference MPointers
+            while (temp->next != nullptr && *temp->next->data < *current->data) {
                 temp = temp->next;
             }
             current->next = temp->next;
@@ -98,15 +102,19 @@ void DoublyLinkedList<T>::insertionSort() {
 // Algoritmo Quick Sort - Función de partición
 template <typename T>
 Node<T>* DoublyLinkedList<T>::partition(Node<T>* low, Node<T>* high) {
-    T pivot = high->data.getValue();
+    // Get value using * to dereference MPointer
+    T pivot = *high->data;
     Node<T>* i = low->prev;
     for (Node<T>* j = low; j != high; j = j->next) {
-        if (j->data.getValue() < pivot) {
+        // Compare values using * to dereference MPointers
+        if (*j->data < pivot) {
             i = (i == nullptr) ? low : i->next;
+            // Swap MPointers directly
             std::swap(i->data, j->data);
         }
     }
     i = (i == nullptr) ? low : i->next;
+    // Swap MPointers directly
     std::swap(i->data, high->data);
     return i;
 }
@@ -121,11 +129,11 @@ void DoublyLinkedList<T>::quickSortRec(Node<T>* low, Node<T>* high) {
     }
 }
 
-// Metodo Quick Sort
+// Método Quick Sort
 template <typename T>
 void DoublyLinkedList<T>::quickSort() {
     Node<T>* high = head;
-    while (high->next != nullptr) {
+    while (high && high->next != nullptr) {
         high = high->next;
     }
     quickSortRec(head, high);
